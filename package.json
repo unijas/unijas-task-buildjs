@@ -1,5 +1,5 @@
 {
-  "name": "isojas-task-buildjs",
+  "name": "unijas-task-buildjs",
   "version": "0.1.0",
   "description": "Exported gulp-tasks for building isojas clientjs",
   "main": "gulpfile.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/isojas/isojas-task-buildjs.git"
+    "url": "git+https://github.com/unijas/unijas-task-buildjs.git"
   },
   "keywords": [
     "isojas",
@@ -17,9 +17,9 @@
   "author": "Siggi Duenkel <chaosprinz76@gmail.com> (https://siggiduenkel.wordpress.com)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/isojas/isojas-task-buildjs/issues"
+    "url": "https://github.com/unijas/unijas-task-buildjs/issues"
   },
-  "homepage": "https://github.com/isojas/isojas-task-buildjs#readme",
+  "homepage": "https://github.com/unijas/unijas-task-buildjs#readme",
   "dependencies": {
     "babelify": "^7.3.0",
     "browserify": "^13.0.1",
