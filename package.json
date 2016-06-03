@@ -29,7 +29,7 @@
     "react": "^15.1.0",
     "react-dom": "^15.1.0",
     "react-router": "^2.4.1",
-    "require-gulp-tasks": "^1.0.0",
+    "unijas-task-helper": "github:unijas/unijas-task-helper",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "yargs": "^4.7.1"

@@ -10,37 +10,10 @@ const Babelify = require('babelify')
 const Uglify = require('gulp-uglify')
 const Gutil = require('gulp-util')
 const Domain = require('domain')
-
-/**
- * ## readConfigFile
- * require given file or the default-config-file and read in the stylus-conf
- * @param  {[string]} file path to the config-file to use
- * @return {[Object]}      stylus config-object
- */
-let readConfigFile = function (file) {
-  let module
-  try {
-    module = require(file)
-  } catch (e) {
-    module = require(Join(__dirname, 'default.conf.json'))
-  }
-  return module
-}
-
-/**
- * ## buildPathes
- * @param  {[Array]} pathes Elements are file-glob-arrays
- * @return {[Array]}        paths/file-globs as strings with prefixed cwd
- */
-let buildPathes = function (pathes) {
-  pathes = pathes.map(path => {
-    return Join(process.cwd(), ...path)
-  })
-  return pathes
-}
+const Helper = require('unijas-task-helper')
 
 let configFile = Join(process.cwd(), 'config', 'build.conf.json')
-let clientConfig = readConfigFile(configFile).js.client
+let clientConfig = Helper.readConfigFile(__dirname, configFile).js.client
 
 gulp.task('buildjs:vendor', ()=> {
   let d = Domain.create()
@@ -60,7 +33,7 @@ gulp.task('buildjs:vendor', ()=> {
     .pipe(Sourcemaps.init({loadMaps: true}))
     .pipe(Uglify())
     .pipe(Sourcemaps.write('.'))
-    .pipe(gulp.dest(buildPathes(clientConfig.dest)[0]))
+    .pipe(gulp.dest(Helper.buildPathes(clientConfig.dest)[0]))
 })
 
 gulp.task('buildjs:client', ()=> {
@@ -72,7 +45,7 @@ gulp.task('buildjs:client', ()=> {
   let common
   d.run(function () {
     common = Browserify({
-      entries: buildPathes(clientConfig.src),
+      entries: Helper.buildPathes(clientConfig.src),
       debug: true
     })
     .external(clientConfig.dependencies)
@@ -84,7 +57,7 @@ gulp.task('buildjs:client', ()=> {
     .pipe(Buffer())
     .pipe(Sourcemaps.init({loadMaps: true}))
     .pipe(Sourcemaps.write('.'))
-    .pipe(gulp.dest(buildPathes(clientConfig.dest)[0]))
+    .pipe(gulp.dest(Helper.buildPathes(clientConfig.dest)[0]))
 })
 
 
