@@ -1,16 +1,18 @@
 {
-  "client": {
-    "dependencies": [
-      "react",
-      "react-dom",
-      "jquery"
-    ],
-    "src": [
-      ["src", "components", "main.js"]
-    ],
-    "dest": [
-      ["dist", "public", "js"]
-    ],
-    "destFileName": "app.js"
+  "js": {
+    "client": {
+      "dependencies": [
+        "react",
+        "react-dom",
+        "jquery"
+      ],
+      "src": [
+        ["src", "components", "main.js"]
+      ],
+      "dest": [
+        ["dist", "public", "js"]
+      ],
+      "destFileName": "app.js"
+    }
   }
 }
