@@ -8,6 +8,8 @@ const Buffer = require('vinyl-buffer')
 const Sourcemaps = require('gulp-sourcemaps')
 const Babelify = require('babelify')
 const Uglify = require('gulp-uglify')
+const Gutil = require('gulp-util')
+const Domain = require('domain')
 
 /**
  * ## readConfigFile
@@ -22,8 +24,7 @@ let readConfigFile = function (file) {
   } catch (e) {
     module = require(Join(__dirname, 'default.conf.json'))
   }
-  console.log(module)
-  return module.client
+  return module
 }
 
 /**
@@ -38,12 +39,22 @@ let buildPathes = function (pathes) {
   return pathes
 }
 
-let clientConfig = readConfigFile(Join(process.cwd(), 'config', 'build.conf.json'))
-console.log(buildPathes(clientConfig.dest))
+let configFile = Join(process.cwd(), 'config', 'build.conf.json')
+let clientConfig = readConfigFile(configFile).js.client
+
 gulp.task('buildjs:vendor', ()=> {
-  return Browserify()
-    .require(clientConfig.dependencies)
-    .bundle()
+  let d = Domain.create()
+  d.on('error', (err) => {
+    Gutil.log('Browserfiy-error on vendor:')
+    Gutil.log(err.message)
+  })
+  let common
+  d.run(() => {
+    common = Browserify()
+      .require(clientConfig.dependencies)
+      .bundle()
+  })
+  return common
     .pipe(Source('vendor.js'))
     .pipe(Buffer())
     .pipe(Sourcemaps.init({loadMaps: true}))
@@ -53,18 +64,27 @@ gulp.task('buildjs:vendor', ()=> {
 })
 
 gulp.task('buildjs:client', ()=> {
-  let common = Browserify({
-    entries: buildPathes(clientConfig.src),
-    debug: true
-  }).external(clientConfig.dependencies)
+  let d = Domain.create()
+  d.on('error', (err) => {
+    Gutil.log('Browserfiy-error on app:')
+    Gutil.log(err.message)
+  })
+  let common
+  d.run(function () {
+    common = Browserify({
+      entries: buildPathes(clientConfig.src),
+      debug: true
+    })
+    .external(clientConfig.dependencies)
     .transform(Babelify, {presets: ['es2015', 'react']})
     .bundle()
+  })
+  return common
     .pipe(Source(clientConfig.destFileName))
     .pipe(Buffer())
     .pipe(Sourcemaps.init({loadMaps: true}))
     .pipe(Sourcemaps.write('.'))
     .pipe(gulp.dest(buildPathes(clientConfig.dest)[0]))
-  return common
 })
 
 
