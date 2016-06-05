@@ -49,7 +49,10 @@ gulp.task('buildjs:client', ()=> {
       debug: true
     })
     .external(clientConfig.dependencies)
-    .transform(Babelify, {presets: ['es2015', 'react']})
+    .transform(Babelify, { 
+       presets: ['es2015', 'react'],
+       plugins: ['transform-object-rest-spread']
+     })
     .bundle()
   })
   return common
