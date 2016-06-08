@@ -4,10 +4,10 @@
       "dependencies": [
         "react",
         "react-dom",
-        "jquery"
+        "immutable"
       ],
       "src": [
-        ["src", "components", "main.js"]
+        ["src", "app", "components", "main.js"]
       ],
       "dest": [
         ["dist", "public", "js"]
